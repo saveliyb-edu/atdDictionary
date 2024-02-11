@@ -76,7 +76,6 @@ public:
 
         while (current) {
             if (list.search(current->word)) {
-                // Удаляем текущий узел
                 Node* tmp = current;
                 current = current->next;
                 if (prev) {
@@ -106,13 +105,26 @@ public:
             delete tmp;
         }
 
-        list.head = nullptr; // Очищаем второй список
+        list.head = nullptr;
     }
 
 
 
     friend std::ostream& operator<<(std::ostream& out, const DictionaryList& obj);
-    //TODO Добавьте методы дружественную функцию getIntersection
+
+    friend DictionaryList getIntersection(const DictionaryList& list1, DictionaryList& list2) {
+        DictionaryList result;
+
+        Node* current1 = list1.head;
+        while (current1) {
+            if (list2.search(current1->word)) {
+                result.insert(current1->word);
+            }
+            current1 = current1->next;
+        }
+
+        return result;
+    }
 };
 
 std::ostream& operator<<(std::ostream& out, const DictionaryList& obj) {
@@ -138,6 +150,10 @@ int main() {
     dict2.insert("fig");
     std::cout << "dict2: " << dict2 << std::endl;
 
+    std::cout << "test getIntersection function" << std::endl;
+    DictionaryList dict3 = getIntersection(dict2, dict1);
+    std::cout << "dict3: " << dict3 << std::endl;
+
 
     dict1.remove("apple");
     std::cout << "delete 'apple' from dict1: " << std::endl;
@@ -153,7 +169,6 @@ int main() {
     std::cout << "merge dict2 with dict1: " << std::endl;
     dict2.merge(dict1);
     std::cout << "dict2: " << dict2 << std::endl << "dict1: " << dict1 << std::endl;
-
 
     return 0;
 }
