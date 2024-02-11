@@ -70,8 +70,33 @@ public:
         }
     }
 
+    void deleteWords(DictionaryList& list) {
+        Node* prev = nullptr;
+        Node* current = head;
+
+        while (current) {
+            if (list.search(current->word)) {
+                // Удаляем текущий узел
+                Node* tmp = current;
+                current = current->next;
+                if (prev) {
+                    prev->next = current;
+                }
+                else {
+                    head = current;
+                }
+                delete tmp;
+            }
+            else {
+                prev = current;
+                current = current->next;
+            }
+        }
+    }
+
+
     friend std::ostream& operator<<(std::ostream& out, const DictionaryList& obj);
-    //TODO Добавьте методы merge, deleteWords и дружественную функцию getIntersection
+    //TODO Добавьте методы merge и дружественную функцию getIntersection
 };
 
 std::ostream& operator<<(std::ostream& out, const DictionaryList& obj) {
@@ -89,21 +114,24 @@ int main() {
     dict1.insert("apple");
     dict1.insert("banana");
     dict1.insert("cherry");
-    std::cout << dict1 << std::endl;
+    std::cout << "dict1: " << dict1 << std::endl;
 
     DictionaryList dict2;
     dict2.insert("banana");
     dict2.insert("date");
     dict2.insert("fig");
-    std::cout <<  dict2 << std::endl;
+    std::cout << "dict2: " << dict2 << std::endl;
 
 
     dict1.remove("apple");
-    std::cout << "delete 'apple' from dict1: ";
-    std::cout << dict1 << std::endl;
+    std::cout << "delete 'apple' from dict1: " << std::endl;
+    std::cout << "dict1: " << dict1 << std::endl;
 
     std::cout << "search 'banana' from dict1: " << dict1.search("banana") << std::endl;
 
+    std::cout << "we delete all the words from dict2 that are in dict1" << std::endl;
+    dict2.deleteWords(dict1);
+    std::cout << "dict2: " << dict2 << std::endl << "dict1: " << dict1 << std::endl;
 
 
     return 0;
