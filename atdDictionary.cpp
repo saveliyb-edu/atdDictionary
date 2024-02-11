@@ -94,9 +94,25 @@ public:
         }
     }
 
+    void merge(DictionaryList& list) {
+        Node* current = list.head;
+
+        while (current) {
+            if (!search(current->word)) {
+                insert(current->word);
+            }
+            Node* tmp = current;
+            current = current->next;
+            delete tmp;
+        }
+
+        list.head = nullptr; // Очищаем второй список
+    }
+
+
 
     friend std::ostream& operator<<(std::ostream& out, const DictionaryList& obj);
-    //TODO Добавьте методы merge и дружественную функцию getIntersection
+    //TODO Добавьте методы дружественную функцию getIntersection
 };
 
 std::ostream& operator<<(std::ostream& out, const DictionaryList& obj) {
@@ -131,6 +147,11 @@ int main() {
 
     std::cout << "we delete all the words from dict2 that are in dict1" << std::endl;
     dict2.deleteWords(dict1);
+    std::cout << "dict2: " << dict2 << std::endl << "dict1: " << dict1 << std::endl;
+
+
+    std::cout << "merge dict2 with dict1: " << std::endl;
+    dict2.merge(dict1);
     std::cout << "dict2: " << dict2 << std::endl << "dict1: " << dict1 << std::endl;
 
 
