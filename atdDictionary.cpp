@@ -16,6 +16,7 @@ public:
     DictionaryList() : head(nullptr) {}
 
     void insert(const std::string& newWord) {
+        if (search(newWord)) { return; }
         Node* newNode = new Node(newWord);
         if (!head || head->word > newWord) {
             newNode->next = head;
@@ -70,7 +71,7 @@ public:
     }
 
     friend std::ostream& operator<<(std::ostream& out, const DictionaryList& obj);
-    //TODO Добавьте методы merge, deleteWords и дружественную функцию getIntersection, испроавить insert - нельзя добавлять одинаковые элементы
+    //TODO Добавьте методы merge, deleteWords и дружественную функцию getIntersection
 };
 
 std::ostream& operator<<(std::ostream& out, const DictionaryList& obj) {
