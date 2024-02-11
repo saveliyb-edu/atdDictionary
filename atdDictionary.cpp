@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <cctype>
 
 class DictionaryList {
 private:
@@ -14,6 +15,19 @@ private:
 
 public:
     DictionaryList() : head(nullptr) {}
+
+    DictionaryList(DictionaryList&& other) noexcept : head(other.head) {
+        other.head = nullptr;
+    }
+
+    DictionaryList& operator=(DictionaryList&& other) noexcept {
+        if (this != &other) {
+            clear();
+            head = other.head;
+            other.head = nullptr;
+        }
+        return *this;
+    }
 
     void insert(const std::string& newWord) {
         if (search(newWord)) { return; }
@@ -108,9 +122,24 @@ public:
         list.head = nullptr;
     }
 
+    void clear() {
+        while (head) {
+            Node* tmp = head->next;
+            delete head;
+            head = tmp;
+        }
+    }
 
 
-    friend std::ostream& operator<<(std::ostream& out, const DictionaryList& obj);
+    friend std::ostream& operator<<(std::ostream& out, const DictionaryList& obj) {
+        DictionaryList::Node* current = obj.head;
+        while (current) {
+            out << current->word << " ";
+            current = current->next;
+        }
+
+        return out;
+    }
 
     friend DictionaryList getIntersection(const DictionaryList& list1, DictionaryList& list2) {
         DictionaryList result;
@@ -126,16 +155,6 @@ public:
         return result;
     }
 };
-
-std::ostream& operator<<(std::ostream& out, const DictionaryList& obj) {
-    DictionaryList::Node* current = obj.head;
-    while (current) {
-        out << current->word << " ";
-        current = current->next;
-    }
-
-    return out;
-}
 
 int main() {
     DictionaryList dict1;
@@ -169,6 +188,7 @@ int main() {
     std::cout << "merge dict2 with dict1: " << std::endl;
     dict2.merge(dict1);
     std::cout << "dict2: " << dict2 << std::endl << "dict1: " << dict1 << std::endl;
+
 
     return 0;
 }
