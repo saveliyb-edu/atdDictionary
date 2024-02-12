@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <cctype>
 
 class DictionaryList {
 private:
@@ -80,6 +79,7 @@ public:
         while (head) {
             Node* tmp = head->next;
             delete head;
+            head = nullptr;
             head = tmp;
         }
     }
@@ -126,6 +126,7 @@ public:
         while (head) {
             Node* tmp = head->next;
             delete head;
+            head = nullptr;
             head = tmp;
         }
     }
@@ -141,18 +142,18 @@ public:
         return out;
     }
 
-    friend DictionaryList getIntersection(const DictionaryList& list1, DictionaryList& list2) {
-        DictionaryList result;
+    friend DictionaryList& getIntersection(const DictionaryList& list1, DictionaryList& list2) {
+        DictionaryList* result = new DictionaryList();
 
         Node* current1 = list1.head;
         while (current1) {
             if (list2.search(current1->word)) {
-                result.insert(current1->word);
+                result->insert(current1->word);
             }
             current1 = current1->next;
         }
 
-        return result;
+        return *result;
     }
 };
 
@@ -170,7 +171,7 @@ int main() {
     std::cout << "dict2: " << dict2 << std::endl;
 
     std::cout << "test getIntersection function" << std::endl;
-    DictionaryList dict3 = getIntersection(dict2, dict1);
+    DictionaryList& dict3 = getIntersection(dict2, dict1);
     std::cout << "dict3: " << dict3 << std::endl;
 
 
